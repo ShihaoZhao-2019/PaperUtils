@@ -10,6 +10,7 @@ import numpy as np
 import os
 import cv2
 from tqdm import tqdm
+import argparse 
 """
 为了可视化更改一下dataset
 """
@@ -62,10 +63,22 @@ class CUB():
             return len(self.train_label)
 
 class getFeatureMap(torch.nn.Module):
-    def __init__(self):
+    def __init__(self,args):
         super(getFeatureMap, self).__init__()
-        self.net = torchvision.models.resnet152(pretrained = True)
-
+        #self.net = torchvision.models.resnet152(pretrained = True)
+        if args.net == 'resnet18':
+            self.net = torchvision.models.resnet18(pretrained = True)
+        elif args.net == 'resnet34':
+            self.net = torchvision.models.resnet34(pretrained = True)
+        elif args.net == 'resnet50':
+            self.net = torchvision.models.resnet50(pretrained = True)
+        elif args.net == 'resnet101':
+            self.net = torchvision.models.resnet101(pretrained = True)
+        elif args.net == 'resnet152':
+            self.net = torchvision.models.resnet152(pretrained = True)
+        else:
+            raise ValueError('please choose correct net!')
+    
     def forward(self,x):
         conv1 = self.net.conv1(x)
         bn1 = self.net.bn1(conv1)
@@ -130,21 +143,25 @@ def drawFeature(features_dict,imgOrignPath,imgName,input_root,output_root):
         cv2.imwrite(savePath2,heat_img)
 
 
-def main(root,train):
-    net = getFeatureMap()
+def main(root,train,args):
+    net = getFeatureMap(args)
     Imageloader = getDataLoader(root,train)
     with torch.no_grad():
         net.eval()
         for imgs,imgOrignPath,imgName,_ in tqdm(Imageloader,desc='Processing', unit='item',position=0,total=len(Imageloader)):
             features = net(imgs)
-            drawFeature(features, imgOrignPath, imgName,root,'./output')
+            drawFeature(features, imgOrignPath, imgName,root,args.outdir)
 
 
 """
 模型最大准确率83.24
 """
 if __name__ == '__main__':
-    root = '/data/kb/tanyuanyong/TransFG-master/data/CUB_200_2011_ORIGIN'
-    main(root,True)
+    parser = argparse.ArgumentParser(description='parser value')
+    parser.add_argument('--net', type=str,default='resnet101',choices=['resnet18', 'resnet34','resnet50', 'resnet101','resnet152'])
+    parser.add_argument('--outdir',type=str)
+    root = '/data/kb/tanyuanyong/TransFG-master/data/CUB_200_2011'
+    args = parser.parse_args()
+    main(root,True,args)
 
 
