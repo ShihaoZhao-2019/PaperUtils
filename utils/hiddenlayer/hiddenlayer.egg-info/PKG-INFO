@@ -5,7 +5,6 @@ Summary: Neural network graphs and training metrics for PyTorch and TensorFlow
 Home-page: https://github.com/waleedka/hiddenlayer
 Author: Waleed Abdulla <waleed.abdulla@gmail.com>, Phil Ferriere <pferriere@hotmail.com>
 License: MIT
-Platform: UNKNOWN
 Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Developers
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
@@ -14,6 +13,3 @@ Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3.5
 Classifier: Operating System :: OS Independent
 License-File: LICENSE
-
-UNKNOWN
-

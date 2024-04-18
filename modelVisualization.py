@@ -6,11 +6,13 @@ import numpy as np
 import os
 import cv2
 import hiddenlayer as h
-   
-MyConvNet = torchvision.models.vgg16(True)
- 
+
+MyConvNet = torchvision.models.vgg11(True)
+
 vis_graph = h.build_graph(MyConvNet, torch.zeros([1 ,3,448,448]))
     
 vis_graph.theme = h.graph.THEMES["blue"].copy()
-    
-vis_graph.save("./output/vgg16.png")
+
+if os.path.exists('/output/') != False:
+    os.makedirs('/output/')
+vis_graph.save("./output/vgg11",format='png')
